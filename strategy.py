@@ -46,7 +46,6 @@ class AtWithdrawalPointStrategy(ServiceStrategy):
 
 
 class ServiceContext:
-
     def __init__(self, strategy: ServiceStrategy) -> None:
         self._strategy = strategy
 
@@ -63,7 +62,9 @@ class ServiceContext:
         The Context delegates some work to the Strategy object instead of
         implementing multiple versions of the algorithm on its own.
         """
-        print("Context: Creating a Package using the strategy (not sure how it'll do it)")
+        print(
+            "Context: Creating a Package using the strategy (not sure how it'll do it)"
+        )
         return self._strategy.create_package(package_data)
 
 

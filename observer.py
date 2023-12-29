@@ -7,23 +7,31 @@ class Package:
 
 
 class Observer(ABC):
+    """
+    An observer must provide a method to be called by the Subject whenever
+    something happen.
+    """
+
     @abstractmethod
     def update(self, package: Package) -> None:
         pass
 
 
 class Subject(ABC):
-    @abstractmethod
+    """
+    A subject has objects looking for it. Must provide a mechanism
+    to add, remove or notify observers.
+    """
+
     def add_observer(self, observer: Observer) -> None:
-        pass
+        self._observers.append(observer)
 
-    @abstractmethod
     def remove_observer(self, observer: Observer) -> None:
-        pass
+        self._observers.remove(observer)
 
-    @abstractmethod
     def notify_observers(self) -> None:
-        pass
+        for observer in self._observers:
+            observer.update(self)
 
 
 class Package(Subject):
@@ -43,21 +51,12 @@ class Package(Subject):
         self._state = state
         self.notify_observers()
 
-    def add_observer(self, observer: Observer) -> None:
-        self._observers.append(observer)
-
-    def remove_observer(self, observer: Observer) -> None:
-        self._observers.remove(observer)
-
-    def notify_observers(self) -> None:
-        for observer in self._observers:
-            observer.update(self)
-
 
 class PaymentProcessor(Observer):
     """
     One of the concrete observers
     """
+
     def update(self, package: Package) -> None:
         if package.get_state() == "Delivered_and_Confirmed":
             self.finalize_payment(package)
